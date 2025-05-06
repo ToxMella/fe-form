@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form class="studentForm" id="StudentForm" >
+        <h3>Adictos y Adictas sean bienvenidos, inscribanse a la lista. ☺</h3>
+        <div class="student-form">
+            <label for="name">Nombre: </label>
+            <input type="text" id="name" name="name" placeholder="Nombre" required>
+            <label for="lastName">Apellido: </label>
+            <input type="text" id="lastName" name="lastName" placeholder="Apellido" required>
+            <label for="grade">Nivel: </label>
+            <input type="text" id="drugName" name="drugName" placeholder="Nivel" required>
+            <label for="drug">Droga:</label>
+            <input type="number" id="grade" step="0.1" min="1" max="7" name="grade" placeholder="Nota" required>
+            <button type="submit">Enviar</button>
+        </div>
+    </form>
+    <table id="StudentTable" border="1" cellpadding="8" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Nombre :</th>
+                <th>Apellido :</th>
+                <th>Nivel :</th>
+                <th>Droga :</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Filas de datos -->
+        </tbody>
+    </table>
+</body>
+<script src="/script.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Coral+Pixels&family=Kanchenjunga:wght@400;500;600;700&family=Lavishly+Yours&family=Mystery+Quest&display=swap');
+
+
+body{
+    font-family:"Mystery Quest";
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+    background-color: rgb(107, 10, 10);
+    background-image: url(https://static.vecteezy.com/system/resources/previews/054/940/015/large_2x/groovy-hippie-and-psychedelic-rainbow-symbols-vector.jpg) ;
+    background-repeat: no-repeat;
+    
+}
+
+form{
+    background: linear-gradient(to bottom, rgba(72, 255, 0, 0.932), rgba(255, 0, 0, 0.87)); 
+    border-radius: 8px;
+    height: 20vh;
+    width: 100vh;
+    text-align: center;
+}
+
+table{
+    background: linear-gradient(to bottom, rgba(255, 0, 0, 0.87),  rgba(72, 255, 0, 0.932));
+    border-radius: 8px;
+    width: 100vh;
+    margin: 10px 0px;
+}
+
+.studentForm{
+    border: 2px solid black;
+}
