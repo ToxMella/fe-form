@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form class="studentForm" id="StudentForm">
+        <h3>Notas Asignatura Front-End. ☺</h3>
+        <div class="student-form">
+            <label for="name">Nombre: </label>
+            <input type="text" id="name" name="name" placeholder="Nombre" required>
+            <label for="lastName">Apellido: </label>
+            <input type="text" id="lastName" name="lastName" placeholder="Apellido" required>
+            <label for="grade">Nota: </label>
+            <input type="number" id="grade" step="0.1" min="1" max="7" name="grade" placeholder="Nota" required>
+            <button type="submit">Enviar</button>
+        </div>
+    </form>
+    <table id="StudentTable" border="1" cellpadding="8" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Nombre :</th>
+                <th>Apellido :</th>
+                <th>Nota :</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <p id="promedioCurso">Promedio general del curso: 0</p>
+</body>
+<script>
+    let totalGrades = 0; 
+    let studentCount = 0;
+    document.getElementById("StudentForm").addEventListener("submit", function (event) {
+        event.preventDefault(); 
+
+        const name = document.getElementById("name").value;
+        const lastName = document.getElementById("lastName").value;
+        const grade = parseFloat(document.getElementById("grade").value);
+
+        const table = document.getElementById("StudentTable").querySelector("tbody");
+        const newRow = document.createElement("tr");
+
+
+        const nameCell = document.createElement("td");
+        nameCell.textContent = name;
+
+        const lastNameCell = document.createElement("td");
+        lastNameCell.textContent = lastName;
+
+        const gradeCell = document.createElement("td");
+        gradeCell.textContent = grade;
+
+        newRow.appendChild(nameCell);
+        newRow.appendChild(lastNameCell);
+        newRow.appendChild(gradeCell);
+
+        table.appendChild(newRow);
+
+        totalGrades += grade; 
+        studentCount++; 
+        const average = (totalGrades / studentCount).toFixed(2); 
+        document.getElementById("promedioCurso").textContent = `Promedio general del curso: ${average}`;
+
+        document.getElementById("StudentForm").reset();
+    });
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Coral+Pixels&family=Kanchenjunga:wght@400;500;600;700&family=Lavishly+Yours&family=Mystery+Quest&display=swap');
+
+body {
+    font-family: "Mystery Quest";
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+    background-color: rgb(107, 10, 10);
+    background-image: url(https://live.staticflickr.com/65535/49484501126_563c14b728_b.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+form {
+    background: linear-gradient(to bottom, rgba(72, 255, 0, 0.932), rgba(255, 0, 0, 0.87));
+    border-radius: 8px;
+    height: 20vh;
+    width: 100vh;
+    text-align: center;
+}
+
+table {
+    background: linear-gradient(to bottom, rgba(255, 0, 0, 0.87), rgba(72, 255, 0, 0.932));
+    border-radius: 8px;
+    width: 100vh;
+    margin: 10px 0px;
+}
+
+.studentForm {
+    border: 2px solid black;
+}
+</style>
+</html>
