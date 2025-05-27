@@ -1,7 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Coral+Pixels&family=Kanchenjunga:wght@400;500;600;700&family=Lavishly+Yours&family=Mystery+Quest&display=swap');
-
 body {
-    font-family: "Mystery Quest";
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -19,6 +17,8 @@ body {
     color: rgb(0, 0, 0);
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     margin-bottom: 20px;
+    font-size: 2em;
+    font-weight: 600;
 }
 
 form {
@@ -31,12 +31,28 @@ form {
     margin-bottom: 20px;
 }
 
+form h3 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
 table {
     background: linear-gradient(to bottom, rgba(255, 0, 0, 0.87), rgba(72, 255, 0, 0.932));
     border-radius: 8px;
     width: 100%;
     max-width: 600px;
     margin: 10px 0px;
+    font-size: 1em;
+}
+
+th {
+    font-weight: 600;
+    padding: 12px 8px;
+}
+
+td {
+    padding: 10px 8px;
 }
 
 .studentForm {
@@ -51,6 +67,21 @@ table {
     margin: 10px 0px;
     padding: 15px;
     text-align: center;
+    border: 2px solid black;
+}
+
+.average-container p {
+    margin: 5px 0;
+    font-size: 1.2em;
+    font-weight: 500;
+}
+
+.total-students {
+    font-size: 0.9em !important;
+    color: rgba(0, 0, 0, 0.8);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding-top: 8px;
+    margin-top: 8px !important;
 }
 
 .error-message {
@@ -65,18 +96,22 @@ input {
     padding: 5px;
     width: 80%;
     max-width: 300px;
+    font-family: inherit;
+    font-size: 1em;
 }
 
-button {
+form button[type="submit"] {
     margin-top: 10px;
     padding: 8px 16px;
     background: linear-gradient(to bottom, rgba(72, 255, 0, 0.932), rgba(255, 0, 0, 0.87));
-    border: none;
+    border: 2px solid black;
     border-radius: 4px;
     cursor: pointer;
+    font-family: inherit;
+    font-size: 1em;
 }
 
-button:hover {
+form button[type="submit"]:hover {
     background: linear-gradient(to bottom, rgba(255, 0, 0, 0.87), rgba(72, 255, 0, 0.932));
 }
 
@@ -86,6 +121,7 @@ button:hover {
     border: 1px solid #ccc;
     border-radius: 4px;
     font-family: inherit;
+    font-size: 1em;
 }
 
 td button {
@@ -103,6 +139,19 @@ td button:hover {
 }
 
 @media (max-width: 768px) {
+    .statistics-section {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .chart-container {
+        padding: 10px;
+    }
+
     form, table, .average-container {
         width: 95%;
         margin: 10px auto;
@@ -110,6 +159,16 @@ td button:hover {
     
     input {
         width: 90%;
+    }
+
+    .main-title {
+        font-size: 1.5em;
+        text-align: center;
+    }
+
+    th, td {
+        font-size: 0.9em;
+        padding: 8px 4px;
     }
 }
 
@@ -129,6 +188,8 @@ td button:hover {
     margin-bottom: 20px;
     color: #000;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    font-size: 1.5em;
+    font-weight: 600;
 }
 
 .stats-grid {
@@ -152,6 +213,7 @@ td button:hover {
     color: #000;
     font-size: 1.1em;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    font-weight: 600;
 }
 
 .stat-box p {
@@ -170,17 +232,24 @@ td button:hover {
     border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-@media (max-width: 768px) {
-    .statistics-section {
-        width: 95%;
-        padding: 15px;
-    }
+.status-approved, .status-failed {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    display: inline-block;
+    width: 85px;
+    text-align: center;
+    font-size: 0.9em;
+}
 
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .chart-container {
-        padding: 10px;
-    }
+.status-approved {
+    background-color: rgba(72, 255, 0, 0.6);
+    color: #006400;
+    border: 1px solid #006400;
+}
+
+.status-failed {
+    background-color: rgba(255, 0, 0, 0.6);
+    color: #8b0000;
+    border: 1px solid #8b0000;
 } 

@@ -3,60 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Seguimiento de Calificaciones</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <form class="studentForm" id="StudentForm" >
-        <h3>Nota Asignatura estudiantes - Front-End</h3>
+    <h1 class="main-title">Seguimiento de calificaciones de estudiantes</h1>
+    <div class="average-container">
+        <p id="promedioCurso">Promedio general del curso: No disponible</p>
+        <p class="total-students">Total de estudiantes: <span id="totalStudents">0</span></p>
+    </div>
+    <form class="studentForm" id="StudentForm">
+        <h3>Notas Asignatura Front-End</h3>
         <div class="student-form">
             <label for="name">Nombre: </label>
             <input type="text" id="name" name="name" placeholder="Nombre" required>
+            <div class="error-message" id="nameError"></div>
+
             <label for="lastName">Apellido: </label>
             <input type="text" id="lastName" name="lastName" placeholder="Apellido" required>
+            <div class="error-message" id="lastNameError"></div>
+
             <label for="grade">Nota: </label>
             <input type="number" id="grade" step="0.1" min="1" max="7" name="grade" placeholder="Nota" required>
-            <button type="submit">Enviar</button>
+            <div class="error-message" id="gradeError"></div>
+
+            <button type="submit">Agregar estudiante</button>
         </div>
     </form>
     <table id="StudentTable" border="1" cellpadding="8" cellspacing="0">
         <thead>
             <tr>
-                <th>Nombre :</th>
-                <th>Apellido :</th>
-                <th>Nota :</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Nota</th>
+                <th>Estado</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-            <!-- Filas de datos -->
         </tbody>
     </table>
+
+    <div class="statistics-section">
+        <h3>Estadísticas del Curso</h3>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <h4>Nota más alta</h4>
+                <p id="highestGrade">No disponible</p>
+            </div>
+            <div class="stat-box">
+                <h4>Nota más baja</h4>
+                <p id="lowestGrade">No disponible</p>
+            </div>
+            <div class="stat-box">
+                <h4>Porcentaje Aprobados</h4>
+                <p id="passPercentage">0%</p>
+            </div>
+            <div class="stat-box">
+                <h4>Porcentaje Reprobados</h4>
+                <p id="failPercentage">0%</p>
+            </div>
+        </div>
+        <div class="chart-container">
+            <canvas id="gradeDistribution"></canvas>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
-<script src="/script.js"></script>
-<style>
-body{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 70vh;
-    background-color: rgb(54, 83, 52);
-    background-image: url(https://static.vecteezy.com/system/resources/previews/054/940/015/large_2x/groovy-hippie-and-psychedelic-rainbow-symbols-vector.jpg) ;
-    background-repeat: no-repeat;
-    
-}
-
-form{
-    background-color: green;
-    height: 20vh;
-    width: 70vh;
-}
-
-table{
-    background: rgb(3, 201, 3);
-    width: 70vh;
-    margin: 10px 0px;
-}
-
-.studentForm{
-    border: 2px solid black;
-}
+</html>
