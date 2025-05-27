@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seguimiento de Calificaciones</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1 class="main-title">Seguimiento de calificaciones de estudiantes</h1>
@@ -34,6 +35,7 @@
                 <th>Nombre :</th>
                 <th>Apellido :</th>
                 <th>Nota :</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -86,22 +88,19 @@
         const grade = parseFloat(document.getElementById("grade").value);
 
         const table = document.getElementById("StudentTable").querySelector("tbody");
-        const newRow = document.createElement("tr");
+        const newRow = table.insertRow();
 
-        const nameCell = document.createElement("td");
+        const nameCell = newRow.insertCell();
         nameCell.textContent = name;
 
-        const lastNameCell = document.createElement("td");
+        const lastNameCell = newRow.insertCell();
         lastNameCell.textContent = lastName;
 
-        const gradeCell = document.createElement("td");
+        const gradeCell = newRow.insertCell();
         gradeCell.textContent = grade;
 
-        newRow.appendChild(nameCell);
-        newRow.appendChild(lastNameCell);
-        newRow.appendChild(gradeCell);
-
-        table.appendChild(newRow);
+        const actionsCell = newRow.insertCell();
+        addActionButtons(newRow);
 
         totalGrades += grade; 
         studentCount++; 
@@ -110,99 +109,105 @@
 
         document.getElementById("StudentForm").reset();
     });
+
+    function addActionButtons(row) {
+        const actionsCell = row.cells[3];
+        actionsCell.innerHTML = '';
+
+        // Crear botón de editar
+        const editButton = document.createElement("button");
+        editButton.textContent = "✏️";
+        editButton.style.marginRight = "5px";
+        editButton.addEventListener("click", function() {
+            const name = row.cells[0].textContent;
+            const lastName = row.cells[1].textContent;
+            const grade = parseFloat(row.cells[2].textContent);
+            editRow(row, name, lastName, grade);
+        });
+
+        // Crear botón de eliminar
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "❌";
+        deleteButton.addEventListener("click", function() {
+            if (confirm("¿Estás seguro de que deseas eliminar este estudiante?")) {
+                const gradeToRemove = parseFloat(row.cells[2].textContent);
+                totalGrades -= gradeToRemove;
+                studentCount--;
+                
+                if (studentCount > 0) {
+                    const newAverage = (totalGrades / studentCount).toFixed(2);
+                    document.getElementById("promedioCurso").textContent = `Promedio general del curso: ${newAverage}`;
+                } else {
+                    document.getElementById("promedioCurso").textContent = "Promedio general del curso: No disponible";
+                }
+                
+                row.parentNode.removeChild(row);
+            }
+        });
+
+        actionsCell.appendChild(editButton);
+        actionsCell.appendChild(deleteButton);
+    }
+
+    function editRow(row, currentName, currentLastName, currentGrade) {
+        const cells = row.cells;
+        
+        // Guardar el valor actual de la nota para actualizar el promedio
+        const oldGrade = currentGrade;
+        
+        // Crear inputs para edición
+        cells[0].innerHTML = `<input type="text" value="${currentName}" class="edit-input">`;
+        cells[1].innerHTML = `<input type="text" value="${currentLastName}" class="edit-input">`;
+        cells[2].innerHTML = `<input type="number" value="${currentGrade}" step="0.1" min="1" max="7" class="edit-input">`;
+        
+        // Cambiar botones por guardar y cancelar
+        const actionsCell = cells[3];
+        actionsCell.innerHTML = '';
+        
+        const saveButton = document.createElement("button");
+        saveButton.textContent = "💾";
+        saveButton.style.marginRight = "5px";
+        
+        const cancelButton = document.createElement("button");
+        cancelButton.textContent = "↩️";
+        
+        actionsCell.appendChild(saveButton);
+        actionsCell.appendChild(cancelButton);
+        
+        // Función para guardar cambios
+        saveButton.addEventListener("click", function() {
+            const newName = cells[0].querySelector("input").value.trim();
+            const newLastName = cells[1].querySelector("input").value.trim();
+            const newGrade = parseFloat(cells[2].querySelector("input").value);
+            
+            if (!newName || !newLastName || isNaN(newGrade) || newGrade < 1 || newGrade > 7) {
+                alert("Por favor, ingrese datos válidos");
+                return;
+            }
+            
+            // Actualizar el promedio
+            totalGrades = totalGrades - oldGrade + newGrade;
+            const newAverage = (totalGrades / studentCount).toFixed(2);
+            document.getElementById("promedioCurso").textContent = `Promedio general del curso: ${newAverage}`;
+            
+            // Actualizar celdas
+            cells[0].textContent = newName;
+            cells[1].textContent = newLastName;
+            cells[2].textContent = newGrade;
+            
+            // Restaurar los botones de acción
+            addActionButtons(row);
+        });
+        
+        // Función para cancelar edición
+        cancelButton.addEventListener("click", function() {
+            cells[0].textContent = currentName;
+            cells[1].textContent = currentLastName;
+            cells[2].textContent = currentGrade;
+            
+            // Restaurar los botones de acción
+            addActionButtons(row);
+        });
+    }
 </script>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Coral+Pixels&family=Kanchenjunga:wght@400;500;600;700&family=Lavishly+Yours&family=Mystery+Quest&display=swap');
-
-body {
-    font-family: "Mystery Quest";
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 20px;
-    background-color: rgb(107, 10, 10);
-    background-image: url(https://live.staticflickr.com/65535/49484501126_563c14b728_b.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.main-title {
-    color: rgb(0, 0, 0);
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    margin-bottom: 20px;
-}
-
-form {
-    background: linear-gradient(to bottom, rgba(72, 255, 0, 0.932), rgba(255, 0, 0, 0.87));
-    border-radius: 8px;
-    padding: 20px;
-    width: 100%;
-    max-width: 600px;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-table {
-    background: linear-gradient(to bottom, rgba(255, 0, 0, 0.87), rgba(72, 255, 0, 0.932));
-    border-radius: 8px;
-    width: 100%;
-    max-width: 600px;
-    margin: 10px 0px;
-}
-
-.studentForm {
-    border: 2px solid black;
-}
-
-.average-container {
-    background: linear-gradient(to bottom, rgba(255, 0, 0, 0.87), rgba(72, 255, 0, 0.932));
-    border-radius: 8px;
-    width: 100%;
-    max-width: 600px;
-    margin: 10px 0px;
-    padding: 15px;
-    text-align: center;
-}
-
-.error-message {
-    color: #ff0000;
-    font-size: 0.9em;
-    margin: 5px 0;
-    min-height: 20px;
-}
-
-input {
-    margin: 5px 0;
-    padding: 5px;
-    width: 80%;
-    max-width: 300px;
-}
-
-button {
-    margin-top: 10px;
-    padding: 8px 16px;
-    background: linear-gradient(to bottom, rgba(72, 255, 0, 0.932), rgba(255, 0, 0, 0.87));
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-button:hover {
-    background: linear-gradient(to bottom, rgba(255, 0, 0, 0.87), rgba(72, 255, 0, 0.932));
-}
-
-@media (max-width: 768px) {
-    form, table, .average-container {
-        width: 95%;
-        margin: 10px auto;
-    }
-    
-    input {
-        width: 90%;
-    }
-}
-</style>
 </html>
