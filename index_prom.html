@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seguimiento de Calificaciones</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <h1 class="main-title">Seguimiento de calificaciones de estudiantes</h1>
@@ -41,10 +42,36 @@
         <tbody>
         </tbody>
     </table>
+
+    <div class="statistics-section">
+        <h3>Estadísticas del Curso</h3>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <h4>Nota más alta</h4>
+                <p id="highestGrade">No disponible</p>
+            </div>
+            <div class="stat-box">
+                <h4>Nota más baja</h4>
+                <p id="lowestGrade">No disponible</p>
+            </div>
+            <div class="stat-box">
+                <h4>Estudiantes Aprobados</h4>
+                <p id="passCount">0</p>
+            </div>
+            <div class="stat-box">
+                <h4>Estudiantes Reprobados</h4>
+                <p id="failCount">0</p>
+            </div>
+        </div>
+        <div class="chart-container">
+            <canvas id="gradeDistribution"></canvas>
+        </div>
+    </div>
 </body>
 <script>
     let totalGrades = 0; 
     let studentCount = 0;
+    let gradeChart = null;
 
     function validateForm() {
         let isValid = true;
@@ -74,6 +101,114 @@
         }
 
         return isValid;
+    }
+
+    function updateStatistics() {
+        const table = document.getElementById("StudentTable");
+        const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+        const grades = [];
+        let passCount = 0;
+        let failCount = 0;
+
+        // Recolectar todas las notas
+        for (let row of rows) {
+            const grade = parseFloat(row.cells[2].textContent);
+            grades.push(grade);
+            if (grade >= 4.0) {
+                passCount++;
+            } else {
+                failCount++;
+            }
+        }
+
+        // Actualizar estadísticas
+        if (grades.length > 0) {
+            const highest = Math.max(...grades);
+            const lowest = Math.min(...grades);
+            document.getElementById("highestGrade").textContent = highest.toFixed(1);
+            document.getElementById("lowestGrade").textContent = lowest.toFixed(1);
+        } else {
+            document.getElementById("highestGrade").textContent = "No disponible";
+            document.getElementById("lowestGrade").textContent = "No disponible";
+        }
+
+        document.getElementById("passCount").textContent = passCount;
+        document.getElementById("failCount").textContent = failCount;
+
+        // Actualizar gráfico
+        updateChart(grades);
+    }
+
+    function updateChart(grades) {
+        // Preparar datos para el gráfico
+        const gradeRanges = {
+            '1.0-1.9': 0,
+            '2.0-2.9': 0,
+            '3.0-3.9': 0,
+            '4.0-4.9': 0,
+            '5.0-5.9': 0,
+            '6.0-7.0': 0
+        };
+
+        grades.forEach(grade => {
+            if (grade < 2.0) gradeRanges['1.0-1.9']++;
+            else if (grade < 3.0) gradeRanges['2.0-2.9']++;
+            else if (grade < 4.0) gradeRanges['3.0-3.9']++;
+            else if (grade < 5.0) gradeRanges['4.0-4.9']++;
+            else if (grade < 6.0) gradeRanges['5.0-5.9']++;
+            else gradeRanges['6.0-7.0']++;
+        });
+
+        const ctx = document.getElementById('gradeDistribution').getContext('2d');
+        
+        if (gradeChart) {
+            gradeChart.destroy();
+        }
+
+        gradeChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(gradeRanges),
+                datasets: [{
+                    label: 'Distribución de Notas',
+                    data: Object.values(gradeRanges),
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(255, 159, 64, 0.5)',
+                        'rgba(255, 205, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(153, 102, 255, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Distribución de Notas por Rango'
+                    }
+                }
+            }
+        });
     }
 
     document.getElementById("StudentForm").addEventListener("submit", function (event) {
@@ -108,6 +243,7 @@
         document.getElementById("promedioCurso").textContent = `Promedio general del curso: ${average}`;
 
         document.getElementById("StudentForm").reset();
+        updateStatistics();
     });
 
     function addActionButtons(row) {
@@ -142,6 +278,7 @@
                 }
                 
                 row.parentNode.removeChild(row);
+                updateStatistics();
             }
         });
 
@@ -197,6 +334,7 @@
             
             // Restaurar los botones de acción
             addActionButtons(row);
+            updateStatistics();
         });
         
         // Función para cancelar edición
